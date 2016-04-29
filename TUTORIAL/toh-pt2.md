@@ -9,6 +9,8 @@
 
 现在让我们盘算一下显示一个英雄榜，我们需要什么？首先，我们需要一个英雄列表。我们希望在一个视图模板中显示那些英雄，所以我们需要一种方式来做到这一点。
 
+------
+
 ### 我们做到哪了
 
 在我们继续英雄导览的 Part2 之前，让我们来验证一下，在完成 Part1之后，我们应该有如下的文档结构，如果不是，那我们就需要回到Part1，并弄清我们错过了什么。
@@ -33,6 +35,8 @@ angular2-tour-of-heroes
 npm start
 ```
 这样，当我们继续构建英雄导览时，这个应用能够保持在运行状态。
+
+------
 
 ### 显示我们的英雄
 
@@ -81,4 +85,134 @@ public heroes = HEROES;
     <!-- each hero goes here -->
   </li>
 </ul>
+```
+
+现在我们有了一个可以用英雄们来填充的模板了。
+
+#### 用 `ngFor` 列出英雄们
+
+我们想要在组件中给模板绑定 `heroes` 数组，遍历它们，并分别显示出来。我们需要从Angular中获取一些帮助来实现它。让我们一步一步来。
+
+首先个性 `<li>` 标签，增加内置指令 `*ngFor`。
+
+```
+<li *ngFor="let hero of heroes">
+```
+
+> * 在 `ngFor` 前面的前导星号（`*`）是此语法的重要组成部分。
+
+
+> 在`ngFor`加前缀（`*`）表明`<li>`元素及其子元素构成了一个主模板。  
+该 `ngFor` 指令遍历 `heroes` 数组，由 `AppComponent.heroes` 属性返回，并冲压出该模板的实例。  
+`ngFor` 双引号中代码的意思为 *“在 `heros` 数组中取出每个 `hero` ，存储到本地 `hero` 变量，并且将其提供给相应的模板实例 ”*。  
+“hero”之前的 `let` 关键字标识了 `hero` 做为模板的一个输入变量。我们可引用这个变量，在模板来访问一个英雄的属性。  
+关于 `ngFor` 及模板的输入变量的更多内容，请查看章节：[Displaying Data](https://angular.io/docs/ts/latest/guide/displaying-data.html#ngFor) 和 [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html#ngFor) 
+
+
+现在我们在 `<li>` 标签之间插入一些内容，使用 `hero` 模板变量，来显示英雄的属性。
+
+```
+<li *ngFor="let hero of heroes">
+  <span class="badge">{{hero.id}}</span> {{hero.name}}
+</li>
+```
+
+当浏览器刷新时，我们应该看到一个英雄列表了！
+
+#### 美化英雄们
+
+我们的英雄名单看起来相当乏味。我们要在视觉上让用户明显的区分开，鼠标悬停在哪位英雄上，又有哪位英雄被选中了。
+
+```
+styles:[`
+  .selected {
+    background-color: #CFD8DC !important;
+    color: white;
+  }
+  .heroes {
+    margin: 0 0 2em 0;
+    list-style-type: none;
+    padding: 0;
+    width: 15em;
+  }
+  .heroes li {
+    cursor: pointer;
+    position: relative;
+    left: 0;
+    background-color: #EEE;
+    margin: .5em;
+    padding: .3em 0;
+    height: 1.6em;
+    border-radius: 4px;
+  }
+  .heroes li.selected:hover {
+    background-color: #BBD8DC !important;
+    color: white;
+  }
+  .heroes li:hover {
+    color: #607D8B;
+    background-color: #DDD;
+    left: .1em;
+  }
+  .heroes .text {
+    position: relative;
+    top: -3px;
+  }
+  .heroes .badge {
+    display: inline-block;
+    font-size: small;
+    color: white;
+    padding: 0.8em 0.7em 0 0.7em;
+    background-color: #607D8B;
+    line-height: 1em;
+    position: relative;
+    left: -1px;
+    top: -4px;
+    height: 1.8em;
+    margin-right: .8em;
+    border-radius: 4px 0 0 4px;
+  }
+`]
+
+```
+
+请注意，我们再次使用多行字符串反向单引号（`）。
+
+当我们给组件指定样式时，它们只作用于该特定组件。我们的样式将只适用于我们的 `AppComponent` 并且 不会“泄漏”到外部HTML去。
+
+
+我们展示英雄的模板现在应该看起来想这样：
+```
+<h2>My Heroes</h2>
+<ul class="heroes">
+  <li *ngFor="let hero of heroes">
+    <span class="badge">{{hero.id}}</span> {{hero.name}}
+  </li>
+</ul>
+```
+
+这里有许多样式内容！我们可以像展示的那样使用内嵌 (inline) 模式，或者我们可以把它们移到一个独立的文件，这样可以让我们的组件更简洁。我将在后面的章节这样做，但现在，让我们继续吧...
+
+------
+
+### 选中一个英雄
+
+现在，在我们的 app 中有一个英雄列表，以及单个英雄的展示。列表和单英雄没有以任何方式进行连接。我们希望用户从我们的列表中选择一个英雄，并出现在详细信息视图。这种UI模式被广泛地称为“主 - 明细”。在我们这个案例，主即是英雄列表和明细则是所选择的英雄。
+
+我们给一个 `selectedHero` 组件属性绑定一个click事件，通过它，来连接 "主 --> 明细"。
+
+#### 点击事件
+
+修改 `<li>` 标签，输入一个Angular事件来绑定它的click事件。
+
+```
+<li *ngFor="let hero of heroes" (click)="onSelect(hero)">
+  <span class="badge">{{hero.id}}</span> {{hero.name}}
+</li>
+```
+
+我们来看事件绑定
+
+```
+(click)="onSelect(hero)"
 ```
