@@ -40,7 +40,7 @@ npm start
 
 ### 显示我们的英雄
 
-#### 创建英雄
+* #### 创建英雄
 
 让我们在 `app.component.ts` 里创建一个10位英雄的数组。
 
@@ -63,7 +63,7 @@ var HEROES: Hero[] = [
 
 这个`HEROES`数组是`Hero`类型，这个类在Part1已经定义了。我们期望从WebService中获取这份英雄名单，但还是让我们迈一小步，来显示模拟的英雄。
 
-#### 输出英雄
+* #### 输出英雄
 
 让我们在`AppComponent`中创建一个属性，输出英雄，以用来绑定。
 
@@ -89,7 +89,7 @@ public heroes = HEROES;
 
 现在我们有了一个可以用英雄们来填充的模板了。
 
-#### 用 `ngFor` 列出英雄们
+* #### 用 `ngFor` 列出英雄们
 
 我们想要在组件中给模板绑定 `heroes` 数组，遍历它们，并分别显示出来。我们需要从Angular中获取一些帮助来实现它。让我们一步一步来。
 
@@ -119,7 +119,7 @@ public heroes = HEROES;
 
 当浏览器刷新时，我们应该看到一个英雄列表了！
 
-#### 美化英雄们
+* #### 美化英雄们
 
 我们的英雄名单看起来相当乏味。我们要在视觉上让用户明显的区分开，鼠标悬停在哪位英雄上，又有哪位英雄被选中了。
 
@@ -201,7 +201,7 @@ styles:[`
 
 我们给一个 `selectedHero` 组件属性绑定一个click事件，通过它，来连接 "主 --> 明细"。
 
-#### 点击事件
+* #### 点击事件
 
 修改 `<li>` 标签，输入一个Angular事件来绑定它的click事件。
 
@@ -216,3 +216,27 @@ styles:[`
 ```
 (click)="onSelect(hero)"
 ```
+
+括号标识的 `<li>` 元素的click事件作为目标。等号右边的表达式调用 `AppComponent` 方法，`onSelect()` ，传递模板输入变量 `hero` 作为参数。这是我们之前在 `ngFor` 定义的同一个 `hero` 变量。
+
+> 关于事件绑定的更多内容，请查看章节：[User Input](https://angular.io/docs/ts/latest/guide/user-input.html) 和 [Template Syntax](https://angular.io/docs/ts/latest/guide/template-syntax.html#ngFor) 
+
+* #### 添加 click 处理程序
+
+我们的事件绑定指向的 `onSelect` 方法还不存在。现在，我们将这个方法添加到我们的组件中。
+
+这个方法要做什么呢？它应把该组件的已选择英雄，设置为用户单击的英雄。
+
+而我们的组件还没有一个“已选择英雄”。我们将会从这里开始。
+
+* #### 暴露属性：已选择的英雄
+
+我们不再需要 `AppComponent` 的静态 `hero` 属性。替换它是这个简单的 `selectedHero` 属性：
+
+```
+selectedHero: Hero;
+```
+
+我们已经决定，如果用户没有点中一个英雄，那就不应该有任何英雄是选中状态的。所以我们不会用 `hero` 去初始化 `selectedHero`。
+
+现在，添加一个 `onSelect` 方法，设置 `selectedHero` 属性为用户点击的 `hero`。
