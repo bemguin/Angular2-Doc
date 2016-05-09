@@ -4,13 +4,13 @@
 
 ---
 
-欢迎来到 ** TypeScript 版 Angular **！当前 Angular 2 版本是RC.1。关于最近的增强，修复和重大更改，请参阅 [更改日志](https://github.com/angular/angular/blob/master/CHANGELOG.md) 。
+欢迎来到 **TypeScript 版 Angular**！当前 Angular 2 版本是RC.1。关于最近的增强，修复和重大更改，请参阅 [更改日志](https://github.com/angular/angular/blob/master/CHANGELOG.md) 。
 
 * ## 5分钟快速入门
 
     简短的新手向导，解释了 Angular 的基本概念。
     
-    [点这里，快速入门](./quickstart.md)
+    [点这里，快速入门(50%)](./quickstart.md)
     
 * ## 示例教程 -- 英雄榜
 
